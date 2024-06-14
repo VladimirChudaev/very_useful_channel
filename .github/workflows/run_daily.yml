@@ -9,17 +9,5 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Checkout Code
-              uses: actions/checkout@v4
-=======
-name: Daily Very-Useful Channel
+              uses: actions/checkout@4
 
-on: 
-    push:
-
-jobs:
-    Daily-Run:
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout Code
-              uses: actions/checkout@v4
->>>>>>> 403d44770c6d4b8b879a0b29cfb9c2839442be1c
