@@ -1,5 +1,4 @@
 name: Daily Very-Useful Channel
-
 on: 
     push:
 
@@ -8,5 +7,4 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Checkout Code
-              uses: actions/checkout@4
-
+              uses: actions/checkout@v4
