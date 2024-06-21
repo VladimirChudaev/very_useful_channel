@@ -8,6 +8,7 @@ from itertools import count
 from  pprint import pprint
 from dotenv import load_dotenv
 import tabulate
+import argparse
 
 load_dotenv()
 
@@ -26,7 +27,6 @@ def get_cur():
         .rename(columns={'CharCode':'Валюта', 'Nominal':'Кол-во', 'Value':'За ед.'})
     ) #вытаскиваем и переименовываем нужные столбцы и переименовываем
     
-    #return tabulate.tabulate(df_cur)
     return df_cur.to_string(index=None)
 
 # 2. Функция для получения всех данных с API MOEX
@@ -87,23 +87,22 @@ def send_message(message):
     return res.json()
 
 if __name__ == '__main__':
-    
-    currencies = get_cur() # Получение данных с ЦБРФ
-    df_sh = get_market()  # Получение данных с Мосбиржи
-    
-    # Фильтрация данных голубых фишек
-    df_market_bc = filter_blue_chips(df_sh)
-    
-    # Формируем сообщения для отправки
-    currency_message = "Курсы валют от ЦБРФ:\n\n"
-    currency_message += currencies
-    
-    stock_message = "Акции голубых фишек Мосбиржи:\n\n"
-    stock_message += tabulate.tabulate(df_market_bc, headers='keys', tablefmt='plain')
-    
-    # Отправляем сообщения в Telegram
-    send_message(currency_message)
-    send_message(stock_message)
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--source', required=True, help="Source of the data: 'cbrf' or 'moex'")
+    args = parser.parse_args()
+
+    if args.source == 'cbrf':
+        currencies = get_cur()
+        currency_message = "Курсы валют от ЦБРФ:\n\n"
+        currency_message += currencies
+        send_message(currency_message)
+    elif args.source == 'moex':
+        df_sh = get_market()
+        df_market_bc = filter_blue_chips(df_sh)
+        stock_message = "Акции голубых фишек Мосбиржи:\n\n"
+        stock_message += tabulate.tabulate(df_market_bc, headers='keys', tablefmt='plain')
+        send_message(stock_message)
+
 
 
 
