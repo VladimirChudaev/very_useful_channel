@@ -13,6 +13,16 @@ load_dotenv()
 
 STATE_FILE = 'last_run_state.txt'
 
+def get_last_run_state():
+    if os.path.exists(STATE_FILE):
+        with open(STATE_FILE, 'r') as file:
+            return file.read().strip()
+    return 'cbrf'
+
+def set_last_run_state(state):
+    with open(STATE_FILE, 'w') as file:
+        file.write(state)
+
 def get_cur():
     url = 'https://www.cbr-xml-daily.ru/daily_json.js'
     response = requests.get(url) # делаем запрос к сайту ЦБРФ
