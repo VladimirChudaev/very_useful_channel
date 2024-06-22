@@ -2,8 +2,8 @@ name: Daily Very-Useful Channel
 
 on:
   schedule:
-    - cron: '35 14 * * 6' # ЦБРФ данные
-    - cron: '37 14 * * 6'  # Мосбиржа данные
+    - cron: '20 15 * * 6' # ЦБРФ данные
+    - cron: '23 15 * * 6'  # Мосбиржа данные
   push:
     branches:
       - main 
@@ -13,24 +13,12 @@ env:
   TELEGRAM_CENNAL_ID: ${{ secrets.TELEGRAM_CENNAL_ID }}
 
 jobs:
-  Daily-Run-CBRF:
+  Daily-Run:
     runs-on: ubuntu-latest
-    if: github.event_name == 'schedule' || github.event_name == 'push'  # Запуск при расписании или пуше в main
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
       - name: Install Dependencies
         run: pip install -r requirements.txt
-      - name: Run CBRF App
-        run: python app.py --source cbrf
-
-  Daily-Run-MOEX:
-    runs-on: ubuntu-latest
-    if: github.event_name == 'schedule' || github.event_name == 'push'  # Запуск при расписании или пуше в main
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-      - name: Install Dependencies
-        run: pip install -r requirements.txt
-      - name: Run MOEX App
-        run: python app.py --source moex
+      - name: Run App
+        run: python app.py
