@@ -4,6 +4,9 @@ on:
   schedule:
     - cron: '20 13 * * 6' # ЦБРФ данные
     - cron: '21 13 * * 6'  # Мосбиржа данные
+  push:
+    branches:
+      - main 
 
 env:
   TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
