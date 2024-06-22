@@ -2,8 +2,8 @@ name: Daily Very-Useful Channel
 
 on:
   schedule:
-    - cron: '55 12 * * 1-5' # ЦБРФ данные
-    - cron: '5 16 * * 1-5'  # Мосбиржа данные
+    - cron: '20 13 * * 6' # ЦБРФ данные
+    - cron: '21 13 * * 6'  # Мосбиржа данные
 
 env:
   TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
