@@ -2,7 +2,7 @@ name: Daily Very-Useful Channel
 
 on:
   schedule:
-    - cron: '31 12 * * 1-5' # ЦБРФ данные
+    - cron: '55 12 * * 1-5' # ЦБРФ данные
     - cron: '5 16 * * 1-5'  # Мосбиржа данные
 
 env:
