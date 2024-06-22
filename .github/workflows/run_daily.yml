@@ -1,4 +1,5 @@
 name: Daily Very-Useful Channel
+
 on:
   schedule:
     - cron: '31 12 * * 1-5' # ЦБРФ данные
@@ -9,8 +10,7 @@ env:
   TELEGRAM_CENNAL_ID: ${{ secrets.TELEGRAM_CENNAL_ID }}
 
 jobs:
-  Daily-Run-CBRF:
-    if: github.event.schedule == '31 12 * * 1-5'
+  Daily-Run:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
@@ -18,15 +18,4 @@ jobs:
       - name: Install Dependencies
         run: pip install -r requirements.txt
       - name: Run App
-        run: python app.py --source cbrf
-
-  Daily-Run-MOEX:
-    if: github.event.schedule == '5 16 * * 1-5'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-      - name: Install Dependencies
-        run: pip install -r requirements.txt
-      - name: Run App
-        run: python app.py --source moex 
+        run: python app.py

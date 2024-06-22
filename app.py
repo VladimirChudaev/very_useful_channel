@@ -8,9 +8,10 @@ from itertools import count
 from  pprint import pprint
 from dotenv import load_dotenv
 import tabulate
-import argparse
 
 load_dotenv()
+
+STATE_FILE = 'last_run_state.txt'
 
 def get_cur():
     url = 'https://www.cbr-xml-daily.ru/daily_json.js'
@@ -86,24 +87,34 @@ def send_message(message):
     res = requests.post(url, params=params)
     return res.json()
 
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--source', required=True, help="Source of the data: 'cbrf' or 'moex'")
-    args = parser.parse_args()
+def get_last_run_state():
+    if os.path.exists(STATE_FILE):
+        with open(STATE_FILE, 'r') as file:
+            return file.read().strip()
+    return 'cbrf'
 
-    if args.source == 'cbrf':
+def set_last_run_state(state):
+    with open(STATE_FILE, 'w') as file:
+        file.write(state)
+        
+def main():
+    last_run = get_last_run_state()
+
+    if last_run == 'cbrf':
         currencies = get_cur()
         currency_message = "Курсы валют от ЦБРФ:\n\n"
         currency_message += currencies
         send_message(currency_message)
-    elif args.source == 'moex':
+        set_last_run_state('moex')
+    elif last_run == 'moex':
         df_sh = get_market()
         df_market_bc = filter_blue_chips(df_sh)
         stock_message = "Акции голубых фишек Мосбиржи:\n\n"
         stock_message += tabulate.tabulate(df_market_bc, headers='keys', tablefmt='plain')
         send_message(stock_message)
+        set_last_run_state('cbrf')
+    else:
+        print("Неизвестный источник данных")
 
-
-
-
-    
+if __name__ == '__main__':
+    main()
