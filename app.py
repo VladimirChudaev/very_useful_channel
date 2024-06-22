@@ -87,16 +87,6 @@ def send_message(message):
     res = requests.post(url, params=params)
     return res.json()
 
-def get_last_run_state():
-    if os.path.exists(STATE_FILE):
-        with open(STATE_FILE, 'r') as file:
-            return file.read().strip()
-    return 'cbrf'
-
-def set_last_run_state(state):
-    with open(STATE_FILE, 'w') as file:
-        file.write(state)
-        
 def main():
     last_run = get_last_run_state()
 
@@ -106,15 +96,14 @@ def main():
         currency_message += currencies
         send_message(currency_message)
         set_last_run_state('moex')
+
     elif last_run == 'moex':
         df_sh = get_market()
         df_market_bc = filter_blue_chips(df_sh)
         stock_message = "Акции голубых фишек Мосбиржи:\n\n"
-        stock_message += tabulate.tabulate(df_market_bc, headers='keys', tablefmt='plain')
+        stock_message += df_market_bc.to_string(index=False)
         send_message(stock_message)
         set_last_run_state('cbrf')
-    else:
-        print("Неизвестный источник данных")
 
 if __name__ == '__main__':
     main()

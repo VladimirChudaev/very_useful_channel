@@ -2,8 +2,8 @@ name: Daily Very-Useful Channel
 
 on:
   schedule:
-    - cron: '20 15 * * 6' # ЦБРФ данные
-    - cron: '23 15 * * 6'  # Мосбиржа данные
+    - cron: '50 14 * * 6' # ЦБРФ данные
+    - cron: '54 14 * * 6'  # Мосбиржа данные
   push:
     branches:
       - main 
