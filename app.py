@@ -11,17 +11,7 @@ import tabulate
 
 load_dotenv()
 
-STATE_FILE = 'last_run_state.txt'
-
-def get_last_run_state():
-    if os.path.exists(STATE_FILE):
-        with open(STATE_FILE, 'r') as file:
-            return file.read().strip()
-    return 'cbrf'
-
-def set_last_run_state(state):
-    with open(STATE_FILE, 'w') as file:
-        file.write(state)
+state = 'cbrf'
 
 def get_cur():
     url = 'https://www.cbr-xml-daily.ru/daily_json.js'
@@ -97,21 +87,30 @@ def send_message(message):
     res = requests.post(url, params=params)
     return res.json()
 
+# Функция для получения последнего состояния
+def get_last_run_state():
+    global state
+    return state
+
+# Функция для установки нового состояния
+def set_last_run_state(new_state):
+    global state
+    state = new_state
+
 def main():
     last_run = get_last_run_state()
-
+    
     if last_run == 'cbrf':
         currencies = get_cur()
         currency_message = "Курсы валют от ЦБРФ:\n\n"
         currency_message += currencies
         send_message(currency_message)
         set_last_run_state('moex')
-
-    elif last_run == 'moex':
+    else:
         df_sh = get_market()
         df_market_bc = filter_blue_chips(df_sh)
         stock_message = "Акции голубых фишек Мосбиржи:\n\n"
-        stock_message += df_market_bc.to_string(index=False)
+        stock_message += tabulate.tabulate(df_market_bc, headers='keys', tablefmt='plain')
         send_message(stock_message)
         set_last_run_state('cbrf')
 
