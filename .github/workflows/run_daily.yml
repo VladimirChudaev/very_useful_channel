@@ -2,8 +2,8 @@ name: Daily Very-Useful Channel
 
 on:
   schedule:
-    - cron: '47 12 * * 0'  # ЦБРФ данные в 12:31 по Москве (09:31 UTC) по воскресеньям
-    - cron: '55 12 * * 0'  # Мосбиржа данные в 12:35 по Москве (09:35 UTC) по воскресеньям
+    - cron: '35 13 * * 0' # ЦБРФ данные в 16:31 по Москве (12:31 UTC)
+    - cron: '40 13 * * 0' # Мосбиржа данные в 16:35 по Москве (12:35 UTC)
   push:
     branches:
       - main
@@ -20,15 +20,9 @@ jobs:
         uses: actions/checkout@v4
       - name: Install Dependencies
         run: pip install -r requirements.txt
-      - name: Run App
+      - name: Run App CBRF
+        if: github.event.schedule == '31 12 * * 0'
         run: python app.py
-
-  Daily-Run-MOEX:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-      - name: Install Dependencies
-        run: pip install -r requirements.txt
       - name: Run App MOEX
+        if: github.event.schedule == '35 12 * * 0'
         run: python app.py
