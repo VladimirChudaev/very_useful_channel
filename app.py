@@ -11,7 +11,8 @@ import tabulate
 
 load_dotenv()
 
-state = 'cbrf'
+# Используем глобальную переменную state для переключения между состояниями
+state = os.getenv('STATE', 'cbrf')
 
 def get_cur():
     url = 'https://www.cbr-xml-daily.ru/daily_json.js'
@@ -88,7 +89,6 @@ def send_message(message):
     return res.json()
 
 def main():
-   def main():
     global state
     
     if state == 'cbrf':
@@ -96,14 +96,17 @@ def main():
         currency_message = "Курсы валют от ЦБРФ:\n\n"
         currency_message += currencies
         send_message(currency_message)
-        state = 'moex'  # Переназначение переменной state
-    else:
+        state = 'moex'
+    elif state == 'moex':
         df_sh = get_market()
         df_market_bc = filter_blue_chips(df_sh)
         stock_message = "Акции голубых фишек Мосбиржи:\n\n"
         stock_message += tabulate.tabulate(df_market_bc, headers='keys', tablefmt='plain')
         send_message(stock_message)
-        state = 'cbrf'  # Переназначение переменной state
+        state = 'cbrf'
+
+    # Обновляем переменную среды для сохранения состояния
+    os.environ['STATE'] = state
 
 if __name__ == '__main__':
     main()
