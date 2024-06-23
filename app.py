@@ -11,7 +11,9 @@ import tabulate
 
 load_dotenv()
 
-state = 'cbrf'
+# Глобальные переменные состояния
+current_state = 'cbrf'
+previous_state = 'moex'  # Начальное значение для первого запуска
 
 def get_cur():
     url = 'https://www.cbr-xml-daily.ru/daily_json.js'
@@ -87,32 +89,29 @@ def send_message(message):
     res = requests.post(url, params=params)
     return res.json()
 
-# Функция для получения последнего состояния
-def get_last_run_state():
-    global state
-    return state
-
-# Функция для установки нового состояния
-def set_last_run_state(new_state):
-    global state
-    state = new_state
-
 def main():
-    last_run = get_last_run_state()
+    global current_state, previous_state
     
-    if last_run == 'cbrf':
+    if previous_state == 'moex':
+        current_state = 'cbrf'
+    elif previous_state == 'cbrf':
+        current_state = 'moex'
+    
+    if current_state == 'cbrf':
         currencies = get_cur()
         currency_message = "Курсы валют от ЦБРФ:\n\n"
         currency_message += currencies
         send_message(currency_message)
-        set_last_run_state('moex')
+        previous_state = 'cbrf'
+        current_state = 'moex'
     else:
         df_sh = get_market()
         df_market_bc = filter_blue_chips(df_sh)
         stock_message = "Акции голубых фишек Мосбиржи:\n\n"
         stock_message += tabulate.tabulate(df_market_bc, headers='keys', tablefmt='plain')
         send_message(stock_message)
-        set_last_run_state('cbrf')
+        previous_state = 'moex'
+        current_state = 'cbrf'
 
 if __name__ == '__main__':
     main()
