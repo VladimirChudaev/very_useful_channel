@@ -2,8 +2,8 @@ name: Daily Very-Useful Channel
 
 on:
   schedule:
-    - cron: '01 11 * * 1-5' # ЦБРФ данные в 14:01 по Москве (11:01 UTC) по будням
-    - cron: '10 11 * * 1-5' # Мосбиржа данные в 14:10 по Москве (11:10 UTC) по будням
+    - cron: '50 11 * * 1-5' # ЦБРФ данные в 14:01 по Москве (11:01 UTC) по будням
+    - cron: '57 11 * * 1-5' # Мосбиржа данные в 14:10 по Москве (11:10 UTC) по будням
   push:
     branches:
       - main
@@ -20,7 +20,5 @@ jobs:
         uses: actions/checkout@v4
       - name: Install Dependencies
         run: pip install -r requirements.txt
-      - name: Ensure State File Exists
-        run: echo "cbrf" > state.txt || true
       - name: Run App
         run: python app.py
