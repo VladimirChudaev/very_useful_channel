@@ -11,7 +11,7 @@ import tabulate
 
 load_dotenv()
 
-STATE_FILE = "state.txt"
+STATE_FILE = "Projects/Fin_automat/state.txt"
 
 def read_state():
     if os.path.exists(STATE_FILE):
@@ -113,6 +113,6 @@ def main():
         stock_message += tabulate.tabulate(df_market_bc, headers='keys', tablefmt='plain')
         send_message(stock_message)
         write_state('cbrf')
-
+        
 if __name__ == '__main__':
     main()
