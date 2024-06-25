@@ -11,7 +11,7 @@ import tabulate
 
 load_dotenv()
 
-STATE_FILE = "Projects/Fin_automat/state.txt"
+STATE_FILE = "state.txt"
 
 def read_state():
     if os.path.exists(STATE_FILE):
