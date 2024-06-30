@@ -11,18 +11,6 @@ import tabulate
 
 load_dotenv()
 
-STATE_FILE = "state.txt"
-
-def read_state():
-    if os.path.exists(STATE_FILE):
-        with open(STATE_FILE, "r") as f:
-            return f.read().strip()
-    return "cbrf"
-
-def write_state(state):
-    with open(STATE_FILE, "w") as f:
-        f.write(state)
-
 def get_cur():
     url = 'https://www.cbr-xml-daily.ru/daily_json.js'
     response = requests.get(url) # делаем запрос к сайту ЦБРФ
@@ -38,6 +26,7 @@ def get_cur():
         .rename(columns={'CharCode':'Валюта', 'Nominal':'Кол-во', 'Value':'За ед.'})
     ) #вытаскиваем и переименовываем нужные столбцы и переименовываем
     
+    #return tabulate.tabulate(df_cur)
     return df_cur.to_string(index=None)
 
 # 2. Функция для получения всех данных с API MOEX
@@ -97,22 +86,21 @@ def send_message(message):
     res = requests.post(url, params=params)
     return res.json()
 
-def main():
-    state = read_state()
-    
-    if state == 'cbrf':
-        currencies = get_cur()
-        currency_message = "Курсы валют от ЦБРФ:\n\n"
-        currency_message += currencies
-        send_message(currency_message)
-        write_state('moex')
-    elif state == 'moex':
-        df_sh = get_market()
-        df_market_bc = filter_blue_chips(df_sh)
-        stock_message = "Акции голубых фишек Мосбиржи:\n\n"
-        stock_message += tabulate.tabulate(df_market_bc, headers='keys', tablefmt='plain')
-        send_message(stock_message)
-        write_state('cbrf')
-        
 if __name__ == '__main__':
-    main()
+    
+    currencies = get_cur() # Получение данных с ЦБРФ
+    df_sh = get_market()  # Получение данных с Мосбиржи
+    
+    # Фильтрация данных голубых фишек
+    df_market_bc = filter_blue_chips(df_sh)
+    
+    # Формируем сообщения для отправки
+    currency_message = "Курсы валют от ЦБРФ:\n\n"
+    currency_message += currencies
+    
+    stock_message = "Акции голубых фишек Мосбиржи:\n\n"
+    stock_message += tabulate.tabulate(df_market_bc, headers='keys', tablefmt='plain')
+    
+    # Отправляем сообщения в Telegram
+    send_message(currency_message)
+    send_message(stock_message)

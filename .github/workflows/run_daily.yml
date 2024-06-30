@@ -1,43 +1,19 @@
 name: Daily Very-Useful Channel
-
 on:
   schedule:
-    - cron: '5 10 * * 1-5' # ЦБРФ данные в 13:05 по Москве (11:01 UTC) по будням
-    - cron: '10 10 * * 1-5' # Мосбиржа данные в 13:10 по Москве (11:10 UTC) по будням
-  push:
-    branches:
-      - main
+    - cron: '5 16 * * 1-5'
 
 env:
   TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
-  TELEGRAM_CENNAL_ID: ${{ secrets.TELEGRAM_CENNAL_ID }}
+  TELEGRAM_CENNAL_ID: ${{ secrets.TELEGRAM_CENNAL_ID}}
 
 jobs:
-  Daily-Run:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-      - name: Install Dependencies
-        run: pip install -r requirements.txt
-      - name: Ensure state file exists
-        run: |
-          if [ ! -f state.txt ]; then
-            echo "cbrf" > state.txt
-          fi
-
-      - name: Run Python script
-        run: python app.py
-
-      - name: Configure Git user
-        run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-
-      - name: Commit and push state file
-        run: |
-          git add state.txt
-          git commit -m "Update state file"
-          git push
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    Daily-Run:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout Code
+              uses: actions/checkout@v4
+            - name: Install Dependencies
+              run: pip install -r requirements.txt
+            - name: Run App
+              run: python app.py 
