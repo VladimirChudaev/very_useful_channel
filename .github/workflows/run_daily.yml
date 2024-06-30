@@ -1,7 +1,7 @@
 name: Daily Very-Useful Channel
 on:
   schedule:
-    - cron: '50 9 * * 0'
+    - cron: '5 16 * * 1-5'
 
 env:
   TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
