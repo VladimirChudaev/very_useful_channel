@@ -26,8 +26,12 @@ def get_cur():
         .rename(columns={'CharCode':'Валюта', 'Nominal':'Кол-во', 'Value':'За ед.'})
     ) #вытаскиваем и переименовываем нужные столбцы и переименовываем
     
-    #return tabulate.tabulate(df_cur)
-    return df_cur.to_string(index=None)
+    # Форматируем сообщение в Markdown
+    markdown_message = "*Курсы валют от ЦБРФ:*\n"
+    for index, row in df_cur.iterrows():
+        markdown_message += f"- *{row['Валюта']}*: {row['Кол-во']} = {row['За ед.']} руб.\n"
+    
+    return markdown_message
 
 # 2. Функция для получения всех данных с API MOEX
 def get_market():
@@ -98,8 +102,11 @@ if __name__ == '__main__':
     currency_message = "Курсы валют от ЦБРФ:\n\n"
     currency_message += currencies
     
-    stock_message = "Акции голубых фишек Мосбиржи:\n\n"
-    stock_message += tabulate.tabulate(df_market_bc, headers='keys', tablefmt='plain')
+    stock_message = "*Акции голубых фишек Мосбиржи:*\n\n"
+    for index, row in df_market_bc.iterrows():
+        stock_message += f"*{row['Назв.']}*\n"
+        stock_message += f"Цена: {row['Цена']}\n"
+        stock_message += f"Изм.(%): {row['Изм.(%)']}\n\n"
     
     # Отправляем сообщения в Telegram
     send_message(currency_message)
