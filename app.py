@@ -19,7 +19,7 @@ def get_cur():
         currencies["Valute"]["KZT"], currencies["Valute"]["CNY"], 
         currencies["Valute"]["AED"], currencies["Valute"]["USD"], currencies["Valute"]["EUR"]
     )
-# cоздаем переменную с нужными валютами (в нашемслучае 3 "дружественных" и 2 "мировые" валюты)
+# cоздаем переменную с нужными валютами (в нашем случае 3 "дружественных" и 2 "мировые" валюты)
     df_currenc = pd.DataFrame(fr_currencies) # создаем датафрэйм
     df_cur = (
         df_currenc[['CharCode', 'Nominal', 'Value']]
