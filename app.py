@@ -67,7 +67,7 @@ def filter_blue_chips(df_sh):
         (df_market_bc['SHORTNAME']=='Сбербанк') | (df_market_bc['SHORTNAME'] == 'Татнфт 3ао') | 
         (df_market_bc['SHORTNAME'] == 'ГМКНорНик')|(df_market_bc['SHORTNAME'] =='ММК')|(df_market_bc['SHORTNAME'] =='Магнит ао')|
         (df_market_bc['SHORTNAME'] == 'Полюс')|(df_market_bc['SHORTNAME'] =='НЛМК ао')|(df_market_bc['SHORTNAME'] == 'Новатэк ао')|
-        (df_market_bc['SHORTNAME'] == 'Роснефть')|(df_market_bc['SHORTNAME'] == 'СевСт-ао')|(df_market_bc['SHORTNAME'] == 'РУСАЛ ао')|
+        (df_market_bc['SHORTNAME'] == 'Роснефть')|(df_market_bc['SHORTNAME'] == 'СевСт-ао')|(df_market_bc['SHORTNAME'] == 'ТКСХолд ао')|
         (df_market_bc['SHORTNAME'] =='Сургнфгз')|(df_market_bc['SHORTNAME'] == 'ЛУКОЙЛ')
     ]).rename(columns={'SHORTNAME':'Назв.', 'LEGALCLOSEPRICE':'Цена', 'TRENDCLSPR':'Изм.(%)'})
     return df_market_bc
