@@ -63,7 +63,7 @@ def get_market():
 def filter_blue_chips(df_sh):
     df_market_bc = df_sh[['SHORTNAME', 'LEGALCLOSEPRICE', 'TRENDCLSPR']]
     df_market_bc = (
-        df_market_bc[(df_market_bc['SHORTNAME'] == 'АЛРОСА ао')| (df_market_bc['SHORTNAME'] == 'ГАЗПРОМ ао') | 
+        df_market_bc[(df_market_bc['SHORTNAME'] == 'ЯНДЕКС')| (df_market_bc['SHORTNAME'] == 'ГАЗПРОМ ао') | 
         (df_market_bc['SHORTNAME']=='Сбербанк') | (df_market_bc['SHORTNAME'] == 'Татнфт 3ао') | 
         (df_market_bc['SHORTNAME'] == 'ГМКНорНик')|(df_market_bc['SHORTNAME'] =='ММК')|(df_market_bc['SHORTNAME'] =='Магнит ао')|
         (df_market_bc['SHORTNAME'] == 'Полюс')|(df_market_bc['SHORTNAME'] =='НЛМК ао')|(df_market_bc['SHORTNAME'] == 'Новатэк ао')|
